@@ -1,7 +1,6 @@
 header {
     text-align: center;
     background-color: #f7fcfb;
-    font-weight: 300;
 }
 header * {
     font-weight: 300;
@@ -9,13 +8,17 @@ header * {
 header > div {
     max-width: 1300px;
     margin: auto;
-    width: 100%;
+    width: 90%;
     border-bottom: 1px solid #d7d7d7;
+    padding: 2.5rem 0;
 }
 header > div > h1 {
     font-size: 2.5rem;
     letter-spacing: 10px;
     margin: 0;
+}
+header > nav {
+    padding: 1.6rem 0;
 }
 header > nav a {
     margin: 26px 10px;
