@@ -14,8 +14,12 @@ header > div {
 }
 header > div > h1 {
     font-size: 2.5rem;
-    letter-spacing: 10px;
-    margin: 0;
+    font-weight: 300;
+    letter-spacing: .6rem;
+    color: #2c2b2a;
+}
+header > div > h1 > .diff_char {
+    color: #434342;
 }
 header > nav {
     padding: 1.6rem 0;
