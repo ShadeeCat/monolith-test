@@ -41,6 +41,9 @@ class FormComponent extends React.Component<FormComponentProps, { quantity: numb
 	incrementCounter = () => {
 		this.setState({ quantity: this.state.quantity + 1 })
 	};
+	decrementCounter = () => {
+		this.setState({ quantity: this.state.quantity - 1 })
+	};
 
 	setAttribute = (e: React.SyntheticEvent<HTMLSelectElement>) => {
 		const { state } = this;
@@ -58,12 +61,12 @@ class FormComponent extends React.Component<FormComponentProps, { quantity: numb
 					onChange={ this.setAttribute }
 					data-attr-id={ select.id }
 				>
-					<option>Choose { select.title }</option>
+					<option>{ select.title }</option>
 					{
 						select.labels.length && select.labels.map(label => <option defaultValue={ label.data } key={ label.id } > { label.title } </option>)
 					}
 				</select>
-			</label>
+			</label>;
 			return selectTag
 		});
 
@@ -71,9 +74,11 @@ class FormComponent extends React.Component<FormComponentProps, { quantity: numb
 			{ selectList }
 			<div className="add_to_card">
 				<span>Quantity:</span>
-				<button className="dec_symbol"> </button>
-				<input type="number" value={this.state.quantity} />
-				<button className="inc_symbol" onClick={ this.incrementCounter } > </button>
+				<div>
+					<button className="dec_symbol" onClick={ this.decrementCounter }> </button>
+					<input type="number" value={this.state.quantity} />
+					<button className="inc_symbol" onClick={ this.incrementCounter } > </button>
+				</div>
 			</div>
 			<button onClick={ () => { console.log(this.state); } }>Add To Card</button>
 		</div>
