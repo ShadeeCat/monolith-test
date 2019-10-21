@@ -35,9 +35,9 @@ interface Text {
 class App extends React.Component {
 	state = {
 		cartItems: []
-	};
+	}
 	componentDidMount () {
-		fetch('https://fedtest.monolith.co.il/api/Catalog/GetAll')
+		fetch('http://localhost:3000/data.json')
 		.then(response => response.json())
 		.then(cartItems => {
 			this.setState({ cartItems: cartItems.data })
@@ -47,12 +47,14 @@ class App extends React.Component {
 	  return (
 	    <div className="App">
 	        <GeneralHeader />
+	        <ul>
 	        {
 	        	// Generic product page emulation as a result of home page product list click
 	        	this.state.cartItems.length && this.state.cartItems.slice(0,1).map(
 	        		(product: Product) => <ProductComponent product={ product } key={ product.id } />
 	        	)
 	        }
+	        </ul>
 	    </div>
 	  );
 	}

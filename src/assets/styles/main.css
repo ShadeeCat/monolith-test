@@ -6,28 +6,25 @@ main {
     padding: 0 1% 3rem;
 }
 main > .gallery {
-    max-width: 425px;
-    width: 100%;
-}
-main > .gallery > .main_pic > img {
-    max-width: 425px;
-    object-fit: contain;
-    max-height: 425px;
-    width: 100%;
-}
-main > .gallery > .secondary_pics {
     display: flex;
     flex-wrap: wrap;
+    max-width: 425px;
+    width: 100%;
 }
-main > .gallery > .secondary_pics > img {
+main > .gallery > img.active {
+    order: 1;
+    object-fit: contain;
+    max-height: 425px;
+    max-width: 100%;
+    margin: 0;
+}
+main > .gallery > img {
+    order: 2;
     max-width: 125px;
     object-fit: contain;
     max-height: 125px;
     width: 100%;
     margin: 1.5rem 0.6rem;
-}
-main > .gallery > .secondary_pics > img:first-of-type {
-    margin-left: 0;
 }
 .product_description {
     max-width: 400px;
@@ -173,11 +170,11 @@ main > .gallery > .secondary_pics > img:first-of-type {
     header > div {
         padding: 1.4rem 0;
     }
-    main > .gallery > .main_pic > img {
+    main > .gallery > img {
         max-width: 600px;
         max-height: 600px;
     }
-    main > .gallery > .secondary_pics > img {
+    main > .gallery > img {
         max-width: 135px;
         max-height: 135px;
     }
@@ -230,7 +227,7 @@ main > .gallery > .secondary_pics > img:first-of-type {
     header > div > h1 {
         font-size: 1.3rem;
     }
-    main > .gallery > .secondary_pics > img {
+    main > .gallery > img {
         margin: .5rem 0.3rem;
     }
     .options_choice label > select {
