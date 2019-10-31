@@ -1,61 +1,43 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+
 import "./App.css";
 
-import { GeneralHeader } from "./components/generalHeader";
-import { ProductComponent } from  "./components/product-page/ProductComponent";
+import { HomeComponent } from "./components/home-page/HomeComponent";
+import { ProdComp } from  "./components/product-page/ProductComponent";
 
-export interface Product {
-	id: string,
-	title: string,
-	images: ProductImage[],
-	description: string,
-	min_price: string,
-	attributes: Attribute[],
-}
-export interface ProductImage {
-	title: string,
-	url: string
-}
-export interface Attribute {
-	id: string,
-	title: string,
-	type: 'COLOR' | 'TEXT',
-	labels: (Color | Text)[]
-}
-interface Color {
-	id: string,
-	title: string,
-	data: string,
-}
-interface Text {
-	id: string,
-	title: string,
-	data: string,
-}
 class App extends React.Component {
 	state = {
 		cartItems: []
-	}
+	};
 	componentDidMount () {
 		fetch('http://localhost:3000/data.json')
-		.then(response => response.json())
-		.then(cartItems => {
-			this.setState({ cartItems: cartItems.data })
-		})
+			.then(response => response.json())
+			.then(cartItems => {
+				this.setState({ cartItems: cartItems.data })
+			})
 	}
 	render () {
 	  return (
-	    <div className="App">
-	        <GeneralHeader />
-	        <ul>
-	        {
-	        	// Generic product page emulation as a result of home page product list click
-	        	this.state.cartItems.length && this.state.cartItems.slice(0,1).map(
-	        		(product: Product) => <ProductComponent product={ product } key={ product.id } />
-	        	)
-	        }
-	        </ul>
-	    </div>
+	  	<Router>
+	    	<div className="App">
+				<header>
+					<div>
+						<h1><span>SPECTR</span><span className="diff_char">U</span><span>M</span></h1>
+					</div>
+					<nav>
+						<ul>
+							<li> <Link to="/">HOME</Link> </li>
+							<li> <Link to="/products/1">CART</Link> </li>
+						</ul>
+					</nav>
+				</header>
+				<Switch>
+					<Route exact path='/' component={props => <HomeComponent {...props} data={ this.state.cartItems } />} />
+					<Route path='/products/:product_id' component={props => <ProdComp {...props} data={ this.state.cartItems }  />} />
+				</Switch>
+	    	</div>
+		</Router>
 	  );
 	}
 }

@@ -1,8 +1,38 @@
 import React from 'react';
 
-import { Product, ProductImage, Attribute } from '../../App'
 import { imageLoader } from '../../services/image-loader'
 import "../../assets/styles/main.css"
+
+export interface Product {
+	id: string,
+	title: string,
+	images: ProductImage[],
+	description: string,
+	min_price: string,
+	attributes: Attribute[],
+}
+interface ProductImage {
+	title: string,
+	url: string
+}
+interface Attribute {
+	id: string,
+	title: string,
+	type: 'COLOR' | 'TEXT',
+	labels: (Color | Text)[],
+}
+interface Color {
+	id: string,
+	title: string,
+	data: string,
+	isSelected: boolean
+}
+interface Text {
+	id: string,
+	title: string,
+	data: string,
+	isSelected: boolean
+}
 
 interface Variant {
 	id: string,
@@ -12,40 +42,109 @@ interface Variant {
 	labels: Label[]
 }
 interface Label {
-	attribute_id: String,
-	label_id: String
+	attribute_id: string,
+	label_id: string
 }
-export function ProductComponent (props: { product: Product, key: string }) {
-	const variant: Variant = {
-		id: null,
-		title: null,
-		image: null,
-		price: null,
-		labels: null,
+interface ProdComProps {
+	match: { params: { product_id: string } }
+}
+interface cartItemsState {
+	cartItems: Product[]
+}
+
+export class ProdComp extends React.Component<ProdComProps, cartItemsState> {
+	state = {
+		cartItems: []
+	};
+	componentDidMount () {
+		fetch('http://localhost:3000/data.json')
+			.then(response => response.json())
+			.then(cartItems => {
+				this.setState({ cartItems: cartItems.data })
+			})
 	}
-	function createVariant(attributes: { labels: AttributesLabels['labels'], colorId: string }) {
-		console.log(props.product.attributes.find(attr => attr.type = 'COLOR'));
-		// variant.id is not taken from catalog/get API
-		variant.id = props.product.id
-		variant.title = props.product.title
-		variant.price = props.product.min_price
-		variant.labels = attributes.labels
-		alert(variant.id);
+	render () {
+		const productId = this.props.match.params.product_id
+		const productForRendering = this.state.cartItems.find( el => productId === el.id );
+		console.log(productForRendering)
+		return (
+			<div className="App">
+			{
+				productForRendering 
+				? <ProductComponent product={ productForRendering } />
+				: <h2>Product not found</h2>
+			}
+			</div>
+		);
 	}
-	console.log(props.product.attributes);
-	return <main>
-		<Gallery imagesList={ props.product.images } />
-		<div className="product_description">
-			<h2 id="title"> { props.product.title} </h2>
-			<p id="price"> $ { props.product.min_price }</p>
-			<p className="description"> { props.product.description } </p>
-		</div>
-		<FormComponent formParams={ props.product.attributes } addToCart={ createVariant } />
-	</main>
+}
+
+interface ProductComponentProps {
+	product: Product
+}
+interface ProductComponenState {
+	attributes: Attribute[], 
+	variant: Variant
+}
+class ProductComponent extends React.Component <ProductComponentProps, ProductComponenState > {
+	state = {
+		attributes: this.props.product.attributes.map(a => {
+			a.labels = a.labels.map(label => {
+				label.isSelected = false
+				return label
+			})
+			return a
+		}),
+		variant: {
+			id: null,
+			title: null,
+			image: null,
+			price: null,
+			labels: null,
+		}
+	}
+	createVariant = (attributes: AttributesLabels['labels']) => {
+		console.log(this.state)
+		// console.log(props.product.attributes.find(attr => attr.type = 'COLOR'));
+		this.state.variant.id = this.props.product.id
+		this.state.variant.title = this.props.product.title
+		this.state.variant.price = this.props.product.min_price
+		// variant.labels = attributes.labels
+		alert(this.state.variant.id);
+	}
+	changeThePic = (color: string) => {
+		console.log(color)
+		const { attributes } = this.state
+		attributes
+			.find(attr => attr.type === 'COLOR')
+			.labels.find(l => l.title.toLowerCase() === color)
+			.isSelected = true
+		console.log(attributes);
+		this.setState({ attributes })
+	}
+	render () {
+		console.log(this.state.attributes)
+		return <main>
+			<Gallery imagesList={ this.props.product.images } changeThePic={this.changeThePic} />
+			<div className="product_description">
+				<h2 id="title"> { this.props.product.title} </h2>
+				<p id="price"> $ { this.props.product.min_price }</p>
+				<p className="description"> { this.props.product.description } </p>
+			</div>
+			<FormComponent formParams={ this.state.attributes } addToCart={ this.createVariant }  />
+		</main>
+	}
 }
 
 interface GalleryStateImage extends ProductImage { isActive: boolean }
-class Gallery extends React.Component<{ imagesList: ProductImage[] }, { imagesList: GalleryStateImage[] } > {
+interface GalleryProps {
+	imagesList: ProductImage[], 
+	changeThePic: (picTitle: string) => void
+} 
+interface GalleryState {
+	imagesList: GalleryStateImage[]
+}
+class Gallery extends React.Component<GalleryProps, GalleryState > {
 	state = {
 		imagesList: this.props.imagesList.map(
 			(img: GalleryStateImage, i) => { img.isActive = i === 0; return img }
@@ -58,6 +157,7 @@ class Gallery extends React.Component<{ imagesList: ProductImage[] }, { imagesLi
 		this.setState({ imagesList: images })
 	}
 	render () {
+		console.log(this.props.imagesList)
 		return <div className="gallery">
 			{
 				this.props.imagesList.length && this.props.imagesList.map(
@@ -67,7 +167,11 @@ class Gallery extends React.Component<{ imagesList: ProductImage[] }, { imagesLi
 							src={ imageLoader(img.url) }
 							alt={ img.title }
 							key={ img.url }
-							onClick={ () => { this.setImageActive(i) } }
+							onClick={ () => {
+								console.log(img.title)
+								this.setImageActive(i) 
+								this.props.changeThePic(img.title.match(/^(.+)\.[a-z]+$/)[1].replace(/-/g, ' '))
+							} }
 						/>
 					)
 				)
@@ -76,22 +180,27 @@ class Gallery extends React.Component<{ imagesList: ProductImage[] }, { imagesLi
 	}
 }
 
-interface AttributesLabels { quantity: number, labels: Label[] }
+interface AttributesLabels { 
+	quantity: number, 
+	labels: Label[] 
+}
 interface FormComponentProps { formParams: Attribute[], addToCart: (AttributesLabels) => void }
 class FormComponent extends React.Component<FormComponentProps, AttributesLabels > {
 	constructor(props: FormComponentProps) {
 		super(props);
+		console.log(props.formParams)
 		this.state = { quantity: 0, labels: [] };
 		props.formParams.forEach(attr => {
 			this.state.labels.push({ attribute_id: attr.id, label_id: null })
 		})
+		console.log(props.formParams)
 	}
 
 	incrementCounter = () => {
-		this.setState({ quantity: this.state.quantity + 1 })
+		this.setState({ quantity: +this.state.quantity + 1 })
 	};
 	decrementCounter = () => {
-		this.setState({ quantity: this.state.quantity - 1 })
+		this.setState({ quantity: +this.state.quantity - 1 })
 	};
 
 	setAttribute = (e: React.SyntheticEvent<HTMLSelectElement>) => {
@@ -105,6 +214,7 @@ class FormComponent extends React.Component<FormComponentProps, AttributesLabels
 	};
 
 	render() {
+		console.log(this.props.formParams)
 		const selectList = this.props.formParams.length && this.props.formParams.map((select: Attribute) => {
 			const selectTag = <label key={ select.id }>
 				<select
@@ -115,13 +225,17 @@ class FormComponent extends React.Component<FormComponentProps, AttributesLabels
 				>
 					<option>{ select.title }</option>
 					{
-						select.labels.length && select.labels.map(label => <option value={ label.id } key={ label.id } > { label.title } </option>)
+						select.labels.length && select.labels.map(label => 
+							<option 
+								selected={label.isSelected} 
+								value={ label.id } 
+								key={ label.id } > { label.title } </option>)
 					}
 				</select>
 			</label>;
 			return selectTag
 		});
-
+		console.log(this.state.labels)
 		return <div className="options_choice">
 			{ selectList }
 			<div className="add_to_card">
@@ -136,4 +250,3 @@ class FormComponent extends React.Component<FormComponentProps, AttributesLabels
 		</div>
 	}
 }
-

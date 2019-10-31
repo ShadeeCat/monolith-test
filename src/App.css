@@ -17,11 +17,22 @@ header > div > h1 {
     letter-spacing: 10px;
     margin: 0;
 }
+
 header > nav {
     padding: 1.6rem 0;
+}
+header > nav > ul {
+    display: flex;
+    justify-content: center;
+}
+header > nav > ul > li {
+    list-style: none;
 }
 header > nav a {
     margin: 26px 10px;
     text-decoration: none;
     color: #2c2b2a;
+}
+header > div > h1 .diff_char {
+    color: #31a893;
 }
