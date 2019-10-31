@@ -106,10 +106,14 @@ class ProductComponent extends React.Component <ProductComponentProps, ProductCo
 	createVariant = (attributes: AttributesLabels['labels']) => {
 		console.log(this.state)
 		// console.log(props.product.attributes.find(attr => attr.type = 'COLOR'));
-		this.state.variant.id = this.props.product.id
-		this.state.variant.title = this.props.product.title
-		this.state.variant.price = this.props.product.min_price
-		// variant.labels = attributes.labels
+		
+		const { variant } = this.state
+		const { product } = this.props
+		variant.id = product.id
+		variant.title = product.title
+		variant.price = product.min_price
+		this.setState({ variant })
+
 		alert(this.state.variant.id);
 	}
 	changeThePic = (color: string) => {
@@ -168,7 +172,7 @@ class Gallery extends React.Component<GalleryProps, GalleryState > {
 							alt={ img.title }
 							key={ img.url }
 							onClick={ () => {
-								console.log(img.title)
+								console.log(img.url)
 								this.setImageActive(i) 
 								this.props.changeThePic(img.title.match(/^(.+)\.[a-z]+$/)[1].replace(/-/g, ' '))
 							} }
