@@ -68,13 +68,13 @@ export class ProdComp extends React.Component<ProdComProps, cartItemsState> {
 		const productForRendering = this.state.cartItems.find( el => productId === el.id );
 		console.log(productForRendering)
 		return (
-			<div className="App">
+			<main>
 			{
 				productForRendering 
 				? <ProductComponent product={ productForRendering } />
 				: <h2>Product not found</h2>
 			}
-			</div>
+			</main>
 		);
 	}
 }
@@ -128,7 +128,7 @@ class ProductComponent extends React.Component <ProductComponentProps, ProductCo
 	}
 	render () {
 		console.log(this.state.attributes)
-		return <main>
+		return <div>
 			<Gallery imagesList={ this.props.product.images } changeThePic={this.changeThePic} />
 			<div className="product_description">
 				<h2 id="title"> { this.props.product.title} </h2>
@@ -136,7 +136,7 @@ class ProductComponent extends React.Component <ProductComponentProps, ProductCo
 				<p className="description"> { this.props.product.description } </p>
 			</div>
 			<FormComponent formParams={ this.state.attributes } addToCart={ this.createVariant }  />
-		</main>
+		</div>
 	}
 }
 

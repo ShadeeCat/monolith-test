@@ -24,15 +24,25 @@ header > nav {
 header > nav > ul {
     display: flex;
     justify-content: center;
-}
-header > nav > ul > li {
-    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 header > nav a {
     margin: 26px 10px;
-    text-decoration: none;
     color: #2c2b2a;
 }
 header > div > h1 .diff_char {
     color: #31a893;
+}
+
+li {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+}
+h2 {
+    color: #2c2b2a;
+    margin: 0;
+    font-size: 1.75rem;
 }
