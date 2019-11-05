@@ -150,7 +150,7 @@ main > div > .gallery > img {
 /*mobile changes*/
 
 @media screen and (max-width: 980px) {
-    main {
+    main > div {
         flex-wrap: wrap;
     }
     main > .gallery {
@@ -160,7 +160,7 @@ main > div > .gallery > img {
     header > div {
         padding: 1.4rem 0;
     }
-    main > .gallery > img {
+    .gallery > img {
         max-width: 135px;
         max-height: 135px;
     }
@@ -203,7 +203,7 @@ main > div > .gallery > img {
     header > div > h1 {
         font-size: 1.3rem;
     }
-    main > .gallery > img {
+    .gallery > img {
         margin: .5rem 0.3rem;
     }
     .options_choice label > select {
