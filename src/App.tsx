@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
 
 import "./App.css";
 
@@ -27,8 +27,8 @@ class App extends React.Component {
 					</div>
 					<nav>
 						<ul>
-							<li> <Link to="/">HOME</Link> </li>
-							<li> <Link to="/products/1">CART</Link> </li>
+							<li> <NavLink to="/">HOME</NavLink> </li>
+							<li> <NavLink to="/products/1">CART</NavLink> </li>
 						</ul>
 					</nav>
 				</header>
